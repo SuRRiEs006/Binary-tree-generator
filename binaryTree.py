@@ -107,58 +107,56 @@ class BinaryTreeCreator:
             return node
             break
           
-
+          
       
 
-    def breakupStatement(self):
+    def main(self):
         workingInputList = list(self.binaryTreeStr[1:-1])
-       # startingLevelOfTree = self.levelsOfTree(workingInputList)
-       # print(workinglevelsOfTreeArray)
-      
-        # if len(workinglevelsOfTreeArray) > 0:
-        #   lowestVal = len(workinglevelsOfTreeArray)
-        #   for l in range (0,len(workinglevelsOfTreeArray)):
-        #     if workinglevelsOfTreeArray[l][1] <= lowestVal:
-        #       lowestVal = workinglevelsOfTreeArray[l][1]
-              
-
-
-
-        print(self.addToTree(self.levelsOfTree(workingInputList)).left.left.value)
+        expressionTree = self.addToTree(self.levelsOfTree(workingInputList))
+        print(evaluateTree(expressionTree))
+        treeToTerminal(expressionTree,0)
         
         
+def evaluateTree(expressionTree):
+  answer = 0
+  if expressionTree.value == "*":
+    answer =  float(evaluateTree(expressionTree.left)) * float(evaluateTree(expressionTree.right))
+  elif expressionTree.value == "/":
+    answer =  float(evaluateTree(expressionTree.left)) / float(evaluateTree(expressionTree.right))
+  elif expressionTree.value == "+":
+    answer =  float(evaluateTree(expressionTree.left)) + float(evaluateTree(expressionTree.right))
+  elif expressionTree.value == "-":
+    answer =  float(evaluateTree(expressionTree.left)) - float(evaluateTree(expressionTree.right))
+  else:
+    answer=expressionTree.value
+  return(answer)
+  
+
+def treeToTerminal(expressionTree,indentNumber):
+
+
+  if expressionTree.left != None:
+    treeToTerminal(expressionTree.left,indentNumber+1)
+
+  print(str(indentNumber*'  '),expressionTree.value)
+  if expressionTree.right != None:
+
+    treeToTerminal(expressionTree.right,indentNumber+1)
+    
 
 
 
-        
-tree = []
 
-statementOne = BinaryTreeCreator("((((5+2) *(2-1))/((2+9)+((7-2)-1))) *8) ")
+
+
+
+statementOne = BinaryTreeCreator("(((2*(3+2))+5)/2)")
+
 
 (((2*(3+2))+5)/2)
-
+((((5+2) *(2-1))/((2+9)+((7-2)-1))) *8)
 
 (((5+2)*(2-1))/((2+9)+((7-2)-1))*8)
 
 
-[['2', 2, 3], ['*', 2, 4], ['3', 3, 6], ['+', 3, 7], ['2', 3, 8], ['+', 1, 11], ['5', 1, 12], ['/', 0, 14], ['2', 0, 15]]
-
-statementOne.breakupStatement()
-
-
-
-
-
-
-
-
-
-
-[['5', 2, 3], ['+', 2, 4], ['2', 2, 5], ['*', 1, 7], ['2', 2, 9], 
-['-', 2, 10], ['1', 2, 11], ['/', 0, 14], ['2', 2, 17], ['+', 2, 18], ['9', 2, 19], 
-['+', 1, 21], ['7', 3, 24], ['-', 3, 25], ['2', 3, 26], ['-', 2, 28], ['1', 2, 29], ['*', 0, 32], ['8', 0, 33]]
-
-
-
-
-
+statementOne.main()
