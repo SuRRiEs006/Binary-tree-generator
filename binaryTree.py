@@ -29,6 +29,31 @@ class BinaryTreeCreator:
       self.binaryTreeStr = str(binaryTreeStr.replace(' ', ''))
       print("lol")
 
+    def bracketMatching(self, string):
+        openBracketIndexSaver = []
+        sortingArray = []
+        unsortedIndexArray = []
+        completeArray = []
+
+        for i in range(0,len(string)):
+            print(string[i])
+            if string[i] == '(':
+                openBracketIndexSaver.append(i)
+                sortingArray.append(i)
+            elif string[i] == ')':
+                print(openBracketIndexSaver)
+                unsortedIndexArray.append( [ openBracketIndexSaver.pop(),i ])
+
+
+        for x in range(0,len(sortingArray)):
+            for y in range(0,len(unsortedIndexArray)):
+                if unsortedIndexArray[y][0] == sortingArray[x]:
+                    completeArray.append(unsortedIndexArray[y])
+                    break
+        return(completeArray)
+
+
+
     def levelsOfTree(self,inputAray):
       bracketCount = 0
       levelsOfTreeArray = []
@@ -44,9 +69,6 @@ class BinaryTreeCreator:
           levelsOfTreeArray.append([inputAray[i],bracketCount,i])
 
       return(levelsOfTreeArray)
-    
-    def nextIndexSplit(symbolsArray):
-        pass
 
     def breakupStatement(self):
         workingInputList = list(self.binaryTreeStr)
@@ -58,11 +80,12 @@ class BinaryTreeCreator:
           for l in range (0,len(workinglevelsOfTreeArray)):
             if workinglevelsOfTreeArray[l][1] <= lowestVal:
               lowestVal = workinglevelsOfTreeArray[l][1]
-        
+
+              
+        print(self.bracketMatching(self.binaryTreeStr))
         print(lowestVal)
         
 
 statementOne = BinaryTreeCreator("(((5+2)*(2-1))/((2+9)+((7-2)-1))*8)")
 
 statementOne.breakupStatement()
-(((5+2)*(2-1))/((2+9)+((7-2)-1))*8)
