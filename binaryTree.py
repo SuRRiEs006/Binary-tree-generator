@@ -36,12 +36,10 @@ class BinaryTreeCreator:
         completeArray = []
 
         for i in range(0,len(string)):
-            print(string[i])
             if string[i] == '(':
                 openBracketIndexSaver.append(i)
                 sortingArray.append(i)
             elif string[i] == ')':
-                print(openBracketIndexSaver)
                 unsortedIndexArray.append( [ openBracketIndexSaver.pop(),i ])
 
 
@@ -66,12 +64,29 @@ class BinaryTreeCreator:
           bracketCount -= 1
         
         if inputAray[i] in self.defualtOperators:
-          levelsOfTreeArray.append([inputAray[i],bracketCount,i])
+          levelsOfTreeArray.append([inputAray[i],bracketCount,i+1])
 
       return(levelsOfTreeArray)
 
+    def surroundingChar(self,charIndex):
+        #DB = DELETE BOTH SIDE BRACKETS
+        #DR = DELETE ONLY BRACKET TO RIGHT
+        #DL = DELETE ONLY BRACKET TO LEFT
+        #FR = FINAL REMOVING OF BRACKETS EG (3+2)
+        if (self.binaryTreeStr[charIndex-1] in self.otherSymbol) & (self.binaryTreeStr[charIndex+1] in self.otherSymbol):
+            nextStep = "DB"
+        elif (self.binaryTreeStr[charIndex-1] in self.acceptedNums) & (self.binaryTreeStr[charIndex+1] in self.acceptedNums):
+            nextStep = "FR"
+        elif (self.binaryTreeStr[charIndex-1] in self.acceptedNums) & (self.binaryTreeStr[charIndex-1] in self.otherSymbol):
+            nextStep = "DR"
+        elif (self.binaryTreeStr[charIndex-1] in self.otherSymbol) & (self.binaryTreeStr[charIndex+1] in self.acceptedNums):
+            nextStep = "DL"
+        else:
+            print("SOMETHING IS VERRYY VERYY WRONG!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        return nextStep
+
     def breakupStatement(self):
-        workingInputList = list(self.binaryTreeStr)
+        workingInputList = list(self.binaryTreeStr[1:-1])
         workinglevelsOfTreeArray = self.levelsOfTree(workingInputList)
         print(workinglevelsOfTreeArray)
       
@@ -81,11 +96,27 @@ class BinaryTreeCreator:
             if workinglevelsOfTreeArray[l][1] <= lowestVal:
               lowestVal = workinglevelsOfTreeArray[l][1]
 
-              
-        print(self.bracketMatching(self.binaryTreeStr))
-        print(lowestVal)
+        if lowestVal == 0 :
+          found = False
+          indexSearch = len(workinglevelsOfTreeArray)-1
+          while found == False:
+            print(workinglevelsOfTreeArray[indexSearch][1])
+            if workinglevelsOfTreeArray[indexSearch][1] == 0:
+              found = True
+              print(workinglevelsOfTreeArray[indexSearch])
+            indexSearch -=1
+        print(self.surroundingChar(workinglevelsOfTreeArray[indexSearch][2]))
+
         
 
+
 statementOne = BinaryTreeCreator("(((5+2)*(2-1))/((2+9)+((7-2)-1))*8)")
+
+(((2*(3+2))+5)/2)
+
+
+((5+2)*(2-1))/((2+9)+((7-2)-1))*8
+
+
 
 statementOne.breakupStatement()
