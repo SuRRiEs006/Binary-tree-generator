@@ -1,13 +1,14 @@
 #####REFERENCES####
 '''
 - find function (https://stackoverflow.com/questions/11122291/how-to-find-char-in-string-and-get-all-the-indexes)
-
 '''
 
 #######IMPORT######
 import copy
 
 #######CODE#######
+
+    
 
 class Node(object):
     def __init__(self, value):
@@ -63,27 +64,32 @@ class BinaryTreeCreator:
         elif inputAray[i] == ")" :
           bracketCount -= 1
         
-        if inputAray[i] in self.defualtOperators:
+        if (inputAray[i] in self.defualtOperators) or (inputAray[i] in self.acceptedNums):
           levelsOfTreeArray.append([inputAray[i],bracketCount,i+1])
 
       return(levelsOfTreeArray)
 
-    def surroundingChar(self,charIndex):
-        #DB = DELETE BOTH SIDE BRACKETS
-        #DR = DELETE ONLY BRACKET TO RIGHT
-        #DL = DELETE ONLY BRACKET TO LEFT
-        #FR = FINAL REMOVING OF BRACKETS EG (3+2)
-        if (self.binaryTreeStr[charIndex-1] in self.otherSymbol) & (self.binaryTreeStr[charIndex+1] in self.otherSymbol):
-            nextStep = "DB"
-        elif (self.binaryTreeStr[charIndex-1] in self.acceptedNums) & (self.binaryTreeStr[charIndex+1] in self.acceptedNums):
-            nextStep = "FR"
-        elif (self.binaryTreeStr[charIndex-1] in self.acceptedNums) & (self.binaryTreeStr[charIndex-1] in self.otherSymbol):
-            nextStep = "DR"
-        elif (self.binaryTreeStr[charIndex-1] in self.otherSymbol) & (self.binaryTreeStr[charIndex+1] in self.acceptedNums):
-            nextStep = "DL"
-        else:
-            print("SOMETHING IS VERRYY VERYY WRONG!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        return nextStep
+    
+    def addToTree(self,nodePos):
+      for y in range(0,len(workinglevelsOfTreeArray)):
+          if (workinglevelsOfTreeArray[y][1] == 0) & (workinglevelsOfTreeArray[y][0] in self.defualtOperators):
+            print(workinglevelsOfTreeArray[y][0])
+
+            if workinglevelsOfTreeArray[y-1][1] == 0:
+              print('Left ->',workinglevelsOfTreeArray[y-1][0])
+            else:
+              leftArray = [workinglevelsOfTreeArray[:(y)]]
+              print(leftArray)
+              
+
+
+            if workinglevelsOfTreeArray[y+1][1] == 0:
+              print('Right ->',workinglevelsOfTreeArray[y+1][0])
+            else:
+              rightArray = [workinglevelsOfTreeArray[(y+1):]]
+              print(rightArray)
+
+      
 
     def breakupStatement(self):
         workingInputList = list(self.binaryTreeStr[1:-1])
@@ -95,28 +101,45 @@ class BinaryTreeCreator:
           for l in range (0,len(workinglevelsOfTreeArray)):
             if workinglevelsOfTreeArray[l][1] <= lowestVal:
               lowestVal = workinglevelsOfTreeArray[l][1]
-
-        if lowestVal == 0 :
-          found = False
-          indexSearch = len(workinglevelsOfTreeArray)-1
-          while found == False:
-            print(workinglevelsOfTreeArray[indexSearch][1])
-            if workinglevelsOfTreeArray[indexSearch][1] == 0:
-              found = True
-              print(workinglevelsOfTreeArray[indexSearch])
-            indexSearch -=1
-        print(self.surroundingChar(workinglevelsOfTreeArray[indexSearch][2]))
-
+        
+        
         
 
 
-statementOne = BinaryTreeCreator("(((5+2)*(2-1))/((2+9)+((7-2)-1))*8)")
+        
+        
+
+
+
+        
+tree = []
+
+statementOne = BinaryTreeCreator("((2+3)*(4*5))")
 
 (((2*(3+2))+5)/2)
 
 
-((5+2)*(2-1))/((2+9)+((7-2)-1))*8
+(((5+2)*(2-1))/((2+9)+((7-2)-1))*8)
 
 
+[['2', 2, 3], ['*', 2, 4], ['3', 3, 6], ['+', 3, 7], ['2', 3, 8], ['+', 1, 11], ['5', 1, 12], ['/', 0, 14], ['2', 0, 15]]
 
 statementOne.breakupStatement()
+
+
+
+
+
+
+
+
+
+
+[['5', 2, 3], ['+', 2, 4], ['2', 2, 5], ['*', 1, 7], ['2', 2, 9], 
+['-', 2, 10], ['1', 2, 11], ['/', 0, 14], ['2', 2, 17], ['+', 2, 18], ['9', 2, 19], 
+['+', 1, 21], ['7', 3, 24], ['-', 3, 25], ['2', 3, 26], ['-', 2, 28], ['1', 2, 29], ['*', 0, 32], ['8', 0, 33]]
+
+
+
+
+
