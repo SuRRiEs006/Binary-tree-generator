@@ -15,10 +15,11 @@ class Node(object):
         self.value = value
         self.left = None
         self.right = None
+    
 
-class BinaryTree(object):
-    def __init__(self, root):
-      self.root = Node(root)
+# class BinaryTree(object):
+#     def __init__(self, root):
+#       self.root = Node(root)
 
 class BinaryTreeCreator:
     def __init__(self, binaryTreeStr):
@@ -70,42 +71,60 @@ class BinaryTreeCreator:
       return(levelsOfTreeArray)
 
     
-    def addToTree(self,nodePos):
-      for y in range(0,len(workinglevelsOfTreeArray)):
-          if (workinglevelsOfTreeArray[y][1] == 0) & (workinglevelsOfTreeArray[y][0] in self.defualtOperators):
-            print(workinglevelsOfTreeArray[y][0])
+    def addToTree(self,workinglevelsOfTreeArray):
+      minBracketDepth = workinglevelsOfTreeArray[0][1]
+      
 
-            if workinglevelsOfTreeArray[y-1][1] == 0:
+      for i in range(0,len(workinglevelsOfTreeArray)):
+        #print(workinglevelsOfTreeArray)
+        if workinglevelsOfTreeArray[i][1] <= minBracketDepth:
+          minBracketDepth = workinglevelsOfTreeArray[i][1]
+      #print(minBracketDepth)   
+
+
+      for y in range(0,len(workinglevelsOfTreeArray)):
+          if (workinglevelsOfTreeArray[y][1] == minBracketDepth) & (workinglevelsOfTreeArray[y][0] in self.defualtOperators):
+            print(workinglevelsOfTreeArray[y][0])
+            node = Node(workinglevelsOfTreeArray[y][0])
+
+            if workinglevelsOfTreeArray[y-1][1] == minBracketDepth:
               print('Left ->',workinglevelsOfTreeArray[y-1][0])
+              node.left = Node(workinglevelsOfTreeArray[y-1][0])
             else:
-              leftArray = [workinglevelsOfTreeArray[:(y)]]
-              print(leftArray)
+              leftArray = workinglevelsOfTreeArray[:(y)]
+              node.left = self.addToTree(leftArray)
+              #print(leftArray)
               
 
 
-            if workinglevelsOfTreeArray[y+1][1] == 0:
+            if workinglevelsOfTreeArray[y+1][1] == minBracketDepth:
               print('Right ->',workinglevelsOfTreeArray[y+1][0])
+              node.right = Node(workinglevelsOfTreeArray[y+1][0])
             else:
-              rightArray = [workinglevelsOfTreeArray[(y+1):]]
-              print(rightArray)
+              rightArray = workinglevelsOfTreeArray[(y+1):]
+              node.right = self.addToTree(rightArray)
+              #print(rightArray)
+            return node
+            break
+          
 
       
 
     def breakupStatement(self):
         workingInputList = list(self.binaryTreeStr[1:-1])
-        workinglevelsOfTreeArray = self.levelsOfTree(workingInputList)
-        print(workinglevelsOfTreeArray)
+       # startingLevelOfTree = self.levelsOfTree(workingInputList)
+       # print(workinglevelsOfTreeArray)
       
-        if len(workinglevelsOfTreeArray) > 0:
-          lowestVal = len(workinglevelsOfTreeArray)
-          for l in range (0,len(workinglevelsOfTreeArray)):
-            if workinglevelsOfTreeArray[l][1] <= lowestVal:
-              lowestVal = workinglevelsOfTreeArray[l][1]
-        
-        
-        
+        # if len(workinglevelsOfTreeArray) > 0:
+        #   lowestVal = len(workinglevelsOfTreeArray)
+        #   for l in range (0,len(workinglevelsOfTreeArray)):
+        #     if workinglevelsOfTreeArray[l][1] <= lowestVal:
+        #       lowestVal = workinglevelsOfTreeArray[l][1]
+              
 
 
+
+        print(self.addToTree(self.levelsOfTree(workingInputList)).left.left.value)
         
         
 
@@ -114,7 +133,7 @@ class BinaryTreeCreator:
         
 tree = []
 
-statementOne = BinaryTreeCreator("((2+3)*(4*5))")
+statementOne = BinaryTreeCreator("((((5+2) *(2-1))/((2+9)+((7-2)-1))) *8) ")
 
 (((2*(3+2))+5)/2)
 
