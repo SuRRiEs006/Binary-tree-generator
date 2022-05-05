@@ -187,9 +187,11 @@ class BinaryTreeCreator:
         self.validateString()
         workingInputList = list(self.binaryTreeStr[1:-1])
         expressionTree = self.addToTree(self.levelsOfTree(workingInputList))
-        print("THE ANSWER TO YOUR EXPRESSION ",self.binaryTreeStr," IS:",evaluateTree(expressionTree))
-        treeToTerminal(expressionTree,0)
+        print("                         ANSWER \n                        --------- \n THE ANSWER TO YOUR EXPRESSION ",self.binaryTreeStr," IS:",evaluateTree(expressionTree),"""""")
+        print(""" BINARY TREE:""")
         
+        treeToTerminal(expressionTree,0)
+        print("------------------------------------------------------------")
 
         
         
@@ -242,13 +244,13 @@ while optionSelect != True:
         B) LOAD THE LAST VISUALIZED EXPRESSION  
         C) DELETE THE LAST SAVED EXPRESSION
 
-------------------------------------------------------------
         ''')
     menuInput = input("INPUT:  ")
-    print("------------------------------------------------------------")
+    print("------------------------------------------------------------ \n")
     menuInput = menuInput.lower()
 
     if menuInput == "a":
+        statementOne = BinaryTreeCreator("(((2+3)*(4*5))+(1*(2+3)))")
         optionSelect = True
         
     elif menuInput == "b":
@@ -293,13 +295,13 @@ Y8b.     888     888    Y88..88P 888          d8b
 
 
 
-statementOne = BinaryTreeCreator("(((2+3)*(4*5))+(1*(2+3)))")
+
 
 
 (((2*(3+2))+5)/2)
 ((((5+2) *(2-1))/((2+9)+((7-2)-1))) *8)
 
-print(((5+2)*(2-1))/((2+9)+((7-2)-1))*8)
+
 
 
 statementOne.main()
