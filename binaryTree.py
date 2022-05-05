@@ -5,6 +5,7 @@
 
 #######IMPORT######
 import copy
+import time
 
 #######CODE#######
 
@@ -94,8 +95,8 @@ class BinaryTreeCreator:
                 operatorCounter +=1
             if currentStr[i] in self.acceptedNums:
                 numCounter +=1
-
-        if (operatorCounter+1) == numCounter:
+       # print(operatorCounter,numCounter)
+        if ((operatorCounter+1) == numCounter) and (operatorCounter > 0) and (numCounter > 1):
            isValiddOperand = True
         else:
            isValiddOperand = False
@@ -134,15 +135,13 @@ class BinaryTreeCreator:
             print("Not a valid expression, bracket mismatched")
         if isValidSubStrings == False:
             print("Not a valid expression, unrecognised charecters")
-        if isValidBrackets == False:
-            print("Not a valid expression, unrecognised charecters")
         if isValidOperand == False:
             print("Not a valid expression, operator missing.")
 
 
         
 
-        return isValidSubStrings, isValidBrackets, isValidSubStrings, isValidOperand
+        return isValidSubStrings, isValidBrackets, isValidOperand
 
     
     def addToTree(self,workinglevelsOfTreeArray):
@@ -185,10 +184,10 @@ class BinaryTreeCreator:
       
 
     def main(self):
-        isValidSubStrings, isValidBrackets, currentStr, isValidOperand = False, False, False, False
-        while (isValidSubStrings == False) or (isValidBrackets == False) or (currentStr == False) or (isValidOperand == False):
-            isValidSubStrings, isValidBrackets, currentStr, isValidOperand = self.validateString()
-            if (isValidSubStrings == False) or (isValidBrackets == False) or (currentStr == False) or (isValidOperand == False):
+        isValidSubStrings, isValidBrackets,  isValidOperand = False, False,  False
+        while (isValidSubStrings == False) or (isValidBrackets == False) or (isValidOperand == False):
+            isValidSubStrings, isValidBrackets, isValidOperand = self.validateString()
+            if (isValidSubStrings == False) or (isValidBrackets == False) or (isValidOperand == False):
                 experessionIn = ("("+str(input(" \n\nINCORRECT INPUT, PLEASE ENTER YOUR EXPRESSION CORRECTLY: "))+")")
                 self.binaryTreeStr = experessionIn
 
@@ -263,7 +262,9 @@ def menu():
                 statementOne = BinaryTreeCreator(experessionIn)
 
                 statementOne.main()
+                
                 print("Taking you back to menu... ")
+                time.sleep(3)
                 
             elif menuInput == "b":
                 optionSelect = True
