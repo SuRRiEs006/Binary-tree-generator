@@ -27,9 +27,7 @@ class BinaryTreeCreator:
       self.acceptedNums = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
       self.otherSymbol = ['(', ')']
       self.allSubStrings = self.defualtOperators + self.acceptedNums + self.otherSymbol
-      #print(self.allSubStrings)
       self.binaryTreeStr = str(binaryTreeStr.replace(' ', ''))
-      print("lol")
 
     def bracketMatching(self, string):
         openBracketIndexSaver = []
@@ -70,25 +68,100 @@ class BinaryTreeCreator:
 
       return(levelsOfTreeArray)
 
+    def validSubStrings(self):
+        currentStr = copy.copy(self.binaryTreeStr)
+        isValidSubStrings = None
+        for x in range(0,len(self.allSubStrings)):
+
+            currentStr = currentStr.replace(self.allSubStrings[x], '')
+            if currentStr == '':
+                isValidSubStrings = True
+            else:
+                isValidSubStrings = False
+
+        return(isValidSubStrings)
+
+    def validOperand(self):
+        currentStr = copy.copy(self.binaryTreeStr)
+        isValiddOperand = None
+        
+        numCounter = 0
+        operatorCounter = 0
+
+        for i in range(0,len(currentStr)):
+            if currentStr[i] in self.defualtOperators:
+                operatorCounter +=1
+            if currentStr[i] in self.acceptedNums:
+                numCounter +=1
+
+        if (operatorCounter+1) == numCounter:
+           isValiddOperand = True
+        else:
+           isValiddOperand = False
+        
+        return isValiddOperand
+        
+
+    def validBrackets(self):
+        isValidBrackets = None
+        currentStr = copy.copy(self.binaryTreeStr)
+        openBracket = currentStr.count("(")
+        closeBracket = currentStr.count(")")
+
+        if openBracket != closeBracket:
+            isValidBrackets = False
+        else:
+            isValidBrackets = True
+
+        return(isValidBrackets)
+
+
+
+    def validateString(self):
+        
+        currentStr = copy.copy(self.binaryTreeStr)
+
+        isValidSubStrings = self.validSubStrings()
+        isValidBrackets = self.validBrackets()
+        isValidOperand = self.validOperand()
+        # for i in range(0,len(self.defualtOperators)):
+        #     currentStr = currentStr.replace(self.defualtOperators[i], '.')
+
+        # operators = currentStr.count(".")
+
+        if isValidBrackets == False:
+            print("Not a valid expression, bracket mismatched")
+        if isValidSubStrings == False:
+            print("Not a valid expression, unrecognised charecters")
+        if isValidBrackets == False:
+            print("Not a valid expression, unrecognised charecters")
+        if isValidOperand == False:
+            print("Not a valid expression, operator missing.")
+
+
+        
+
+        return isValidSubStrings, isValidBrackets, currentStr
+
     
     def addToTree(self,workinglevelsOfTreeArray):
       minBracketDepth = workinglevelsOfTreeArray[0][1]
       
 
       for i in range(0,len(workinglevelsOfTreeArray)):
-        #print(workinglevelsOfTreeArray)
+
         if workinglevelsOfTreeArray[i][1] <= minBracketDepth:
           minBracketDepth = workinglevelsOfTreeArray[i][1]
-      #print(minBracketDepth)   
+         
 
 
       for y in range(0,len(workinglevelsOfTreeArray)):
           if (workinglevelsOfTreeArray[y][1] == minBracketDepth) & (workinglevelsOfTreeArray[y][0] in self.defualtOperators):
-            print(workinglevelsOfTreeArray[y][0])
+            #print(workinglevelsOfTreeArray[y][0])
             node = Node(workinglevelsOfTreeArray[y][0])
 
             if workinglevelsOfTreeArray[y-1][1] == minBracketDepth:
-              print('Left ->',workinglevelsOfTreeArray[y-1][0])
+              #print('Left ->',workinglevelsOfTreeArray[y-1][0])
               node.left = Node(workinglevelsOfTreeArray[y-1][0])
             else:
               leftArray = workinglevelsOfTreeArray[:(y)]
@@ -98,7 +171,7 @@ class BinaryTreeCreator:
 
 
             if workinglevelsOfTreeArray[y+1][1] == minBracketDepth:
-              print('Right ->',workinglevelsOfTreeArray[y+1][0])
+              #print('Right ->',workinglevelsOfTreeArray[y+1][0])
               node.right = Node(workinglevelsOfTreeArray[y+1][0])
             else:
               rightArray = workinglevelsOfTreeArray[(y+1):]
@@ -111,10 +184,14 @@ class BinaryTreeCreator:
       
 
     def main(self):
+        self.validateString()
         workingInputList = list(self.binaryTreeStr[1:-1])
         expressionTree = self.addToTree(self.levelsOfTree(workingInputList))
-        print(evaluateTree(expressionTree))
+        print("THE ANSWER TO YOUR EXPRESSION ",self.binaryTreeStr," IS:",evaluateTree(expressionTree))
         treeToTerminal(expressionTree,0)
+        
+
+        
         
         
 def evaluateTree(expressionTree):
@@ -145,18 +222,84 @@ def treeToTerminal(expressionTree,indentNumber):
     
 
 
+optionSelect = False
+
+
+while optionSelect != True:
+    print('''
+------------------------------------------------------------
+                                                                                                                                                                  
+                                      
+        88d8b.d8b. .d8888b. 88d888b. dP    dP 
+        88'`88'`88 88ooood8 88'  `88 88    88 
+        88  88  88 88.  ... 88    88 88.  .88 
+        dP  dP  dP `88888P' dP    dP `88888P'
+
+
+        PLEASE SELECT AN OPTION TO CONTINUE:
+
+        A) VISUALIZED AN EXPRESSION
+        B) LOAD THE LAST VISUALIZED EXPRESSION  
+        C) DELETE THE LAST SAVED EXPRESSION
+
+------------------------------------------------------------
+        ''')
+    menuInput = input("INPUT:  ")
+    print("------------------------------------------------------------")
+    menuInput = menuInput.lower()
+
+    if menuInput == "a":
+        optionSelect = True
+        
+    elif menuInput == "b":
+        optionSelect = True
+        
+    elif menuInput == "c":
+        optionSelect = True
+        
+    else:
+        optionSelect = False
+        print('''                                                  
+                                                                                                    
+ .d88b.  888d888 888d888 .d88b.  888d888      d8b 
+d8P  Y8b 888P"   888P"  d88""88b 888P"        Y8P 
+88888888 888     888    888  888 888              
+Y8b.     888     888    Y88..88P 888          d8b 
+ "Y8888  888     888     "Y88P"  888          Y8P
+
+- PLEASE ENSURE THAT YOU PICK BETWEEN OPTIONS A,B,C
+- PLEASE ONLY ONE LETTER IS ENTERED
+
+    ''')
 
 
 
 
 
-statementOne = BinaryTreeCreator("(((2*(3+2))+5)/2)")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+statementOne = BinaryTreeCreator("(((2+3)*(4*5))+(1*(2+3)))")
 
 
 (((2*(3+2))+5)/2)
 ((((5+2) *(2-1))/((2+9)+((7-2)-1))) *8)
 
-(((5+2)*(2-1))/((2+9)+((7-2)-1))*8)
+print(((5+2)*(2-1))/((2+9)+((7-2)-1))*8)
 
 
 statementOne.main()
