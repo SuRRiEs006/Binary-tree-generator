@@ -1,15 +1,23 @@
 #####REFERENCES####
 '''
 - find function (https://stackoverflow.com/questions/11122291/how-to-find-char-in-string-and-get-all-the-indexes)
+-https://www.delftstack.com/howto/python/python-clear-console/
 '''
 
 #######IMPORT######
 import copy
 import time
-
+import os
 #######CODE#######
 
-    
+def clearConsoleMessage(message):
+  command = 'clear'
+  if os.name in ('nt', 'dos'):  # If Machine is running on Windows, use cls
+      command = 'cls'
+  os.system(command)
+  print(message)
+  
+
 
 class Node(object):
     def __init__(self, value):
@@ -194,7 +202,7 @@ class BinaryTreeCreator:
             #print(isValidSubStrings, isValidBrackets, currentStr, isValidOperand)
         workingInputList = list(self.binaryTreeStr[1:-1])
         expressionTree = self.addToTree(self.levelsOfTree(workingInputList))
-        print("                         ANSWER \n                        --------- \n THE ANSWER TO YOUR EXPRESSION ",self.binaryTreeStr," IS:",evaluateTree(expressionTree),"""""")
+        clearConsoleMessage(str("                         ANSWER \n                        --------- \n THE ANSWER TO YOUR EXPRESSION "+str(self.binaryTreeStr)+" IS:"+str(evaluateTree(expressionTree))+""""""))
         print(""" BINARY TREE:""")
         
         treeToTerminal(expressionTree,0)
@@ -235,7 +243,7 @@ def menu():
 
 
         while optionSelect != True:
-            print('''
+            clearConsoleMessage('''
 ------------------------------------------------------------
                                                                                                                                                                 
                                     
@@ -263,22 +271,24 @@ def menu():
 
                 statementOne.main()
                 
-                print("Taking you back to menu... ")
-                time.sleep(3)
+                input("PRESS ENTER TO CONTINUE... ")
+                
                 
             elif menuInput == "b":
                 optionSelect = True
                 
             elif menuInput == "c":
-                print("""THANK YOU FOR USING BINARY TREE MAKER! """)
+                clearConsoleMessage("""THANK YOU FOR USING BINARY TREE MAKER! """)
 
                 quit()
 
                 
             else:
                 optionSelect = False
-                print('''                                                  
-                                                                                                            
+                clearConsoleMessage('''                                                  
+------------------------------------------------------------
+
+
          .d88b.  888d888 888d888 .d88b.  888d888      d8b 
         d8P  Y8b 888P"   888P"  d88""88b 888P"        Y8P 
         88888888 888     888    888  888 888              
