@@ -48,6 +48,7 @@ class BinaryTreeCreator:
                 if unsortedIndexArray[y][0] == sortingArray[x]:
                     completeArray.append(unsortedIndexArray[y])
                     break
+        print(completeArray)
         return(completeArray)
 
 
@@ -141,7 +142,7 @@ class BinaryTreeCreator:
 
         
 
-        return isValidSubStrings, isValidBrackets, currentStr
+        return isValidSubStrings, isValidBrackets, isValidSubStrings, isValidOperand
 
     
     def addToTree(self,workinglevelsOfTreeArray):
@@ -184,7 +185,14 @@ class BinaryTreeCreator:
       
 
     def main(self):
-        self.validateString()
+        isValidSubStrings, isValidBrackets, currentStr, isValidOperand = False, False, False, False
+        while (isValidSubStrings == False) or (isValidBrackets == False) or (currentStr == False) or (isValidOperand == False):
+            isValidSubStrings, isValidBrackets, currentStr, isValidOperand = self.validateString()
+            if (isValidSubStrings == False) or (isValidBrackets == False) or (currentStr == False) or (isValidOperand == False):
+                experessionIn = ("("+str(input(" \n\nINCORRECT INPUT, PLEASE ENTER YOUR EXPRESSION CORRECTLY: "))+")")
+                self.binaryTreeStr = experessionIn
+
+            #print(isValidSubStrings, isValidBrackets, currentStr, isValidOperand)
         workingInputList = list(self.binaryTreeStr[1:-1])
         expressionTree = self.addToTree(self.levelsOfTree(workingInputList))
         print("                         ANSWER \n                        --------- \n THE ANSWER TO YOUR EXPRESSION ",self.binaryTreeStr," IS:",evaluateTree(expressionTree),"""""")
@@ -222,16 +230,16 @@ def treeToTerminal(expressionTree,indentNumber):
 
     treeToTerminal(expressionTree.right,indentNumber+1)
     
+def menu():
+
+        optionSelect = False
 
 
-optionSelect = False
-
-
-while optionSelect != True:
-    print('''
+        while optionSelect != True:
+            print('''
 ------------------------------------------------------------
-                                                                                                                                                                  
-                                      
+                                                                                                                                                                
+                                    
         88d8b.d8b. .d8888b. 88d888b. dP    dP 
         88'`88'`88 88ooood8 88'  `88 88    88 
         88  88  88 88.  ... 88    88 88.  .88 
@@ -242,53 +250,51 @@ while optionSelect != True:
 
         A) VISUALIZED AN EXPRESSION
         B) LOAD THE LAST VISUALIZED EXPRESSION  
-        C) DELETE THE LAST SAVED EXPRESSION
+        C) QUIT
 
-        ''')
-    menuInput = input("INPUT:  ")
-    print("------------------------------------------------------------ \n")
-    menuInput = menuInput.lower()
+                ''')
+            menuInput = input("INPUT:  ")
+            print("------------------------------------------------------------ \n")
+            menuInput = menuInput.lower()
 
-    if menuInput == "a":
-        statementOne = BinaryTreeCreator("(((2+3)*(4*5))+(1*(2+3)))")
-        optionSelect = True
-        
-    elif menuInput == "b":
-        optionSelect = True
-        
-    elif menuInput == "c":
-        optionSelect = True
-        
-    else:
-        optionSelect = False
-        print('''                                                  
-                                                                                                    
- .d88b.  888d888 888d888 .d88b.  888d888      d8b 
-d8P  Y8b 888P"   888P"  d88""88b 888P"        Y8P 
-88888888 888     888    888  888 888              
-Y8b.     888     888    Y88..88P 888          d8b 
- "Y8888  888     888     "Y88P"  888          Y8P
+            if menuInput == "a":
+                experessionIn = ("("+str(input("INPUT YOUR EXPRESSION: "))+")")
+                #statementOne = BinaryTreeCreator("((((2+3)*(4*5))+(1*(2+3))))")
+                statementOne = BinaryTreeCreator(experessionIn)
 
-- PLEASE ENSURE THAT YOU PICK BETWEEN OPTIONS A,B,C
-- PLEASE ONLY ONE LETTER IS ENTERED
+                statementOne.main()
+                print("Taking you back to menu... ")
+                
+            elif menuInput == "b":
+                optionSelect = True
+                
+            elif menuInput == "c":
+                print("""THANK YOU FOR USING BINARY TREE MAKER! """)
 
-    ''')
+                quit()
 
+                
+            else:
+                optionSelect = False
+                print('''                                                  
+                                                                                                            
+         .d88b.  888d888 888d888 .d88b.  888d888      d8b 
+        d8P  Y8b 888P"   888P"  d88""88b 888P"        Y8P 
+        88888888 888     888    888  888 888              
+        Y8b.     888     888    Y88..88P 888          d8b 
+         "Y8888  888     888     "Y88P"  888          Y8P
 
+        - PLEASE ENSURE THAT YOU PICK BETWEEN OPTIONS A,B,C
+        - PLEASE ONLY ONE LETTER IS ENTERED
 
-
-
-
-
-
-
+            ''')
 
 
 
 
 
 
-
+menu()
 
 
 
@@ -298,10 +304,10 @@ Y8b.     888     888    Y88..88P 888          d8b
 
 
 
-(((2*(3+2))+5)/2)
-((((5+2) *(2-1))/((2+9)+((7-2)-1))) *8)
 
 
 
 
-statementOne.main()
+
+
+
