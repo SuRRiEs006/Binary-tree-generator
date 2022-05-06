@@ -194,7 +194,7 @@ class BinaryTreeCreator:
 
       return(levelsOfTreeArray) #RETURNS THE FULL LIST OF TREE
 
-    #ENSURES STRING IS VALID RETURNS TRUE / FALSE
+    #ENSURES STRING IS VALID; RETURNS TRUE / FALSE
     def validSubStrings(self):
         #MAKES A CLONE OF STRING FOR LOCAL USE
         currentStr = copy.copy(self.binaryTreeStr)
@@ -239,13 +239,16 @@ class BinaryTreeCreator:
         
         return isValiddOperand
         
-    #ENSURES BRACKET NUMBER IS VALID RETURNS TRUE / FALSE
+    #ENSURES BRACKET NUMBER IS VALID; RETURNS TRUE / FALSE
     def validBrackets(self):
+      #JUST COUNTS OUT TOTAL CLOSING AND OPENING BRACKETS
         isValidBrackets = None
+        #MAKES A CLONE OF STRING FOR LOCAL USE
         currentStr = copy.copy(self.binaryTreeStr)
         openBracket = currentStr.count("(")
         closeBracket = currentStr.count(")")
-
+        #IF THE DIFFERENCE OF BOTH NUMBER IS 0 THEN THERE IS
+        #NO BRACKET MISMATCH 
         if openBracket != closeBracket:
             isValidBrackets = False
         else:
@@ -254,76 +257,88 @@ class BinaryTreeCreator:
         return(isValidBrackets)
 
 
-
+    #CALLS ALL THE STRING VALIDATING METHODS AND PRESENTS RESULTS
     def validateString(self):
-        
-        currentStr = copy.copy(self.binaryTreeStr)
 
+      #CALLS METHODS
         isValidSubStrings = self.validSubStrings()
         isValidBrackets = self.validBrackets()
         isValidOperand = self.validOperand()
 
+      #IF A FALSE IS RETURNED THEN THERE IS AN OUTPUT EXPLAINING WHAT IS WRONG
         if isValidBrackets == False:
             print("Not a valid expression, bracket mismatched")
         if isValidSubStrings == False:
             print("Not a valid expression, unrecognised charecters")
         if isValidOperand == False:
             print("Not a valid expression, operator missing.") 
-
+      #RETURNS ALL VALUES SO ITS CLEAR TO SEE WHAT PROBLEM IS
         return isValidSubStrings, isValidBrackets, isValidOperand
 
-    
+    #ADDS ALL THE ELEMENTS ONE BY ONE TO THE TREE RECURSIVELY
     def addToTree(self,workinglevelsOfTreeArray):
+      #THIS VARIABLE IS LOADED WITH A SMALL NUMBER TO ALLOW THE FOR LOOP TO WORK PROPERLY#
+      #IF IT WAS LOADED WITH NONE OR ZERO THEN IT WOULDNT WORK AS IT WOULD TRY TO COMPARE
+      #THE NONE VALUE TO AN INT  
       minBracketDepth = workinglevelsOfTreeArray[0][1]
       
-
       for i in range(0,len(workinglevelsOfTreeArray)):
-
+        #FINDS THE SMALLEST NUMBER OR BRACKETS TO TRAVERSE TILL AN EXPRESSION AND NUMBER IS FOUND
         if workinglevelsOfTreeArray[i][1] <= minBracketDepth:
           minBracketDepth = workinglevelsOfTreeArray[i][1]
          
-
+      #USES NESTED IF STATEMENT TO DECIDE IF THE CURRENT INDEX IS A NUMBER OR A NUMBER
+      #THE NUMBER TO THE LEFT IS SAVED TO LEFT AND VICE VERSA, IF A SYMBOL IS FOUND THEN IT CALLS ITSELF
+      #RECURSIVLY AND KEEPS GOING UNTILL NUMBERS AND SYMBOLS ARE FOUND 
       for y in range(0,len(workinglevelsOfTreeArray)):
           if (workinglevelsOfTreeArray[y][1] == minBracketDepth) & (workinglevelsOfTreeArray[y][0] in self.defualtOperators):
-            #print(workinglevelsOfTreeArray[y][0])
             node = Node(workinglevelsOfTreeArray[y][0])
-
+            # A QUICK EXAMPLE BELOW
+            # [1,2,3,4,5] MAKES INTO [1,2],[4,5] MAKES 3 THE ROOT NODE
             if workinglevelsOfTreeArray[y-1][1] == minBracketDepth:
-              #print('Left ->',workinglevelsOfTreeArray[y-1][0])
               node.left = Node(workinglevelsOfTreeArray[y-1][0])
+
             else:
               leftArray = workinglevelsOfTreeArray[:(y)]
               node.left = self.addToTree(leftArray)
-              #print(leftArray)
-              
+
 
             if workinglevelsOfTreeArray[y+1][1] == minBracketDepth:
-              #print('Right ->',workinglevelsOfTreeArray[y+1][0])
               node.right = Node(workinglevelsOfTreeArray[y+1][0])
+
             else:
               rightArray = workinglevelsOfTreeArray[(y+1):]
               node.right = self.addToTree(rightArray)
-              #print(rightArray)
+
+            #END OF RECUSION WHERE EVERTHING CAN BE SAVED
             return node
             break
           
-
+    #CO-ORDINATES ALL THE MEHODS NEEDED TO MAKE A BINARY TREE FROM VALID EXPRESSION     
     def main(self):
+        #ENSURES THAT THE STRING IS VALID SO IT CAN CONTINUE
         isValidSubStrings, isValidBrackets,  isValidOperand = False, False,  False
+        #KEEPS ASKING TILL A VALID STRING INPUTTED
+        #IF ANY OF THE THREE CHECKS COME BACK FALSE THEN IT CAN'T ESCAPE WHILE LOOP
         while (isValidSubStrings == False) or (isValidBrackets == False) or (isValidOperand == False):
+            #THIS IS USEFUL TO BREAK OUT IF AN INPUT IS VALID IT WILL ENSURE THAT ITS POSSIBLE TO CHECK AGAIN
             isValidSubStrings, isValidBrackets, isValidOperand = self.validateString()
             if (isValidSubStrings == False) or (isValidBrackets == False) or (isValidOperand == False):
                 experessionIn = ("("+str(input(" \n\nINCORRECT INPUT, PLEASE ENTER YOUR EXPRESSION CORRECTLY: "))+")")
                 self.binaryTreeStr = experessionIn
 
-            #print(isValidSubStrings, isValidBrackets, currentStr, isValidOperand)
+        #MAKES THE STRING INTO LIST STRIPPING THE FIRST SET
+        #OF BRACKETS TO MAKE EASIER TO MANIPULATE AND WORK WITH
         workingInputList = list(self.binaryTreeStr[1:-1])
         expressionTree = self.addToTree(self.levelsOfTree(workingInputList))
+        #JUST FOR FORMATTING AND AESTHETICS
         clearConsoleMessage(str("                         ANSWER \n                        --------- \n THE ANSWER TO YOUR EXPRESSION "+str(self.binaryTreeStr)+" IS: "+str(evaluateTree(expressionTree))+""""""))
         print(""" BINARY TREE:""")
-        
+        #SHOWS TREE IN TERMINAL
         treeToTerminal(expressionTree,0)
+        #JUST FOR FORMATTING AND AESTHETICS
         print("------------------------------------------------------------")
+        #SERIALIZES THE TREE FOR FUTURE USE
         saveTree(expressionTree)
         
         
