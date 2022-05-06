@@ -8,6 +8,7 @@
 import copy
 import time
 import os
+import pickle
 #######CODE#######
 
 def clearConsoleMessage(message):
@@ -17,14 +18,25 @@ def clearConsoleMessage(message):
   os.system(command)
   print(message)
   
-
-
 class Node(object):
     def __init__(self, value):
         self.value = value
         self.left = None
         self.right = None
-    
+
+
+def saveTree(expressionTree):
+  f = open('tmp.pk1', 'wb')
+  p = pickle.Pickler(f)
+  p.dump(expressionTree)
+  f.close()
+
+def loadTree():
+  f = open('tmp.pk1', 'rb')
+  p = pickle.Unpickler(f)
+  newTreeList = p.load()
+  f.close()
+  return newTreeList
 
 # class BinaryTree(object):
 #     def __init__(self, root):
@@ -202,11 +214,15 @@ class BinaryTreeCreator:
             #print(isValidSubStrings, isValidBrackets, currentStr, isValidOperand)
         workingInputList = list(self.binaryTreeStr[1:-1])
         expressionTree = self.addToTree(self.levelsOfTree(workingInputList))
-        clearConsoleMessage(str("                         ANSWER \n                        --------- \n THE ANSWER TO YOUR EXPRESSION "+str(self.binaryTreeStr)+" IS:"+str(evaluateTree(expressionTree))+""""""))
+        clearConsoleMessage(str("                         ANSWER \n                        --------- \n THE ANSWER TO YOUR EXPRESSION "+str(self.binaryTreeStr)+" IS: "+str(evaluateTree(expressionTree))+""""""))
         print(""" BINARY TREE:""")
         
         treeToTerminal(expressionTree,0)
         print("------------------------------------------------------------")
+        saveTree(expressionTree)
+        
+        
+
 
         
         
@@ -250,15 +266,13 @@ def menu():
         88d8b.d8b. .d8888b. 88d888b. dP    dP 
         88'`88'`88 88ooood8 88'  `88 88    88 
         88  88  88 88.  ... 88    88 88.  .88 
-        dP  dP  dP `88888P' dP    dP `88888P'
+        dP  dP  dP `88888P' dP    dP `88888P'#
 
 
         PLEASE SELECT AN OPTION TO CONTINUE:
-
         A) VISUALIZED AN EXPRESSION
         B) LOAD THE LAST VISUALIZED EXPRESSION  
         C) QUIT
-
                 ''')
             menuInput = input("INPUT:  ")
             print("------------------------------------------------------------ \n")
@@ -275,11 +289,12 @@ def menu():
                 
                 
             elif menuInput == "b":
-                optionSelect = True
+                clearConsoleMessage("YOUR PREVIOUS TREE IS BELOW: \n\n\n")
+                treeToTerminal(loadTree(),0)
+                input("\n \n \nPLEASE PRESS ENTER TO GO BACK TO MENU...")
                 
             elif menuInput == "c":
                 clearConsoleMessage("""THANK YOU FOR USING BINARY TREE MAKER! """)
-
                 quit()
 
                 
@@ -295,9 +310,9 @@ def menu():
         Y8b.     888     888    Y88..88P 888          d8b 
          "Y8888  888     888     "Y88P"  888          Y8P
 
+
         - PLEASE ENSURE THAT YOU PICK BETWEEN OPTIONS A,B,C
         - PLEASE ONLY ONE LETTER IS ENTERED
-
             ''')
 
 
@@ -306,19 +321,3 @@ def menu():
 
 
 menu()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
