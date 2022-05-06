@@ -155,7 +155,15 @@ def loadTree():
   fileOpen.close()
   return newTreeList
 
+
+
+#BinaryTreeCreator IS THE CLASS THAT DOES ALL THE CALCULATION
+#AND STRING MANIPULATION RELATED TO MAKING THE EXPRESSION PROVIDED
+#BY THE USER INTO A TREE AND THEN PRINTING THE TREE WITH CORRECT FORMAT
+
 class BinaryTreeCreator:
+
+    #INITIALIZES ALL THE VARIABLES THAT WILL BE NEEDED A LOT FOR THE TASK
     def __init__(self, binaryTreeStr):
       self.defualtOperators = ['/', '*', '+', '-']
       self.acceptedNums = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
@@ -163,72 +171,67 @@ class BinaryTreeCreator:
       self.allSubStrings = self.defualtOperators + self.acceptedNums + self.otherSymbol
       self.binaryTreeStr = str(binaryTreeStr.replace(' ', ''))
 
-    def bracketMatching(self, string):
-        openBracketIndexSaver = []
-        sortingArray = []
-        unsortedIndexArray = []
-        completeArray = []
-
-        for i in range(0,len(string)):
-            if string[i] == '(':
-                openBracketIndexSaver.append(i)
-                sortingArray.append(i)
-            elif string[i] == ')':
-                unsortedIndexArray.append( [ openBracketIndexSaver.pop(),i ])
-
-
-        for x in range(0,len(sortingArray)):
-            for y in range(0,len(unsortedIndexArray)):
-                if unsortedIndexArray[y][0] == sortingArray[x]:
-                    completeArray.append(unsortedIndexArray[y])
-                    break
-        print(completeArray)
-        return(completeArray)
-
-
-
+    #LEVELS OF TREE CHECKS TO SEE WHAT LEVEL OF THE BINARY TREE THE OPERATOR OR NUMBER WILL BE
     def levelsOfTree(self,inputAray):
       bracketCount = 0
       levelsOfTreeArray = []
       
+      #GOES THROUGH EACH STRING
+      #IF THE STRING IS A BRACKET bracketCount WILL BE 
+      #INCREASED OR DECREASED BY ONE FOR (, ), ACCORDINGLY
+      #IF A OPERATOR OR NUMBER SPOTTED IT IS APPENDED INTO levelsOfTreeArray
+      #IT IS APPENDED IN FORMAT [OPERATOR/NUMBER,LEVEL IN TREE, INDEX IN STRING TO LOCATE OPERATOR] 
       for i in range(0,len(inputAray)):
-
         if inputAray[i] == "(" :
           bracketCount += 1
+
         elif inputAray[i] == ")" :
           bracketCount -= 1
-        
+
+        #CHECKS IF NUMBER / OPERATOR
         if (inputAray[i] in self.defualtOperators) or (inputAray[i] in self.acceptedNums):
           levelsOfTreeArray.append([inputAray[i],bracketCount,i+1])
 
-      return(levelsOfTreeArray)
+      return(levelsOfTreeArray) #RETURNS THE FULL LIST OF TREE
 
+    #ENSURES STRING IS VALID RETURNS TRUE / FALSE
     def validSubStrings(self):
+        #MAKES A CLONE OF STRING FOR LOCAL USE
         currentStr = copy.copy(self.binaryTreeStr)
         isValidSubStrings = None
+        #GOES THROUGH EACH CHARECTER IN STRING, IF ITS ACCEPTED SUBSTRING THEN REMOVES IT
+        #IDEA IS THAT EVERTHING SHOULD BE GONE AFTER TRAVERSING, IF THERE IS LEFT OVER
+        #THEN THERE IS AN INVALID CHARECTER 
         for x in range(0,len(self.allSubStrings)):
-
             currentStr = currentStr.replace(self.allSubStrings[x], '')
+
             if currentStr == '':
                 isValidSubStrings = True
+
             else:
                 isValidSubStrings = False
-
         return(isValidSubStrings)
 
+
+    #ENSURES OPERAND : OPERATOR COUNT IS VALID; RETURNS TRUE / FALSE
     def validOperand(self):
+      #MAKES A CLONE OF STRING FOR LOCAL USE
         currentStr = copy.copy(self.binaryTreeStr)
         isValiddOperand = None
         
         numCounter = 0
         operatorCounter = 0
 
+        #COUNTS TOTAL NUMBERS AND TOTAL OPERATORS IN STRING
+        #IF OPERATOR COUNT IS ONE MORE THAN NUMBER COUNT THEN ITS VALID 
         for i in range(0,len(currentStr)):
             if currentStr[i] in self.defualtOperators:
                 operatorCounter +=1
             if currentStr[i] in self.acceptedNums:
                 numCounter +=1
-       # print(operatorCounter,numCounter)
+       
+        #(operatorCounter > 0) and (numCounter > 1) TO ENSURE 
+        #JUST ONE NUMBER ISN'T GOING TO BR ACCEPTED
         if ((operatorCounter+1) == numCounter) and (operatorCounter > 0) and (numCounter > 1):
            isValiddOperand = True
         else:
@@ -236,7 +239,7 @@ class BinaryTreeCreator:
         
         return isValiddOperand
         
-
+    #ENSURES BRACKET NUMBER IS VALID RETURNS TRUE / FALSE
     def validBrackets(self):
         isValidBrackets = None
         currentStr = copy.copy(self.binaryTreeStr)
@@ -326,14 +329,6 @@ class BinaryTreeCreator:
         
 
 
-        
-        
-        
-
-
-
-
-
-
-
-menu()
+#IF FILE IS IMPORTED THEN IT WONT AUTOMATICALLY RUN MAIN
+if __name__ == "__main__":
+  menu()
