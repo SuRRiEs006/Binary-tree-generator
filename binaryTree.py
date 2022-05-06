@@ -11,36 +11,149 @@ import os
 import pickle
 #######CODE#######
 
+#FUNTION THAT CLEARS CONSOLE AND PRINTS MESSAGE IN EMPTY CONSOLE
 def clearConsoleMessage(message):
+  #TOOK NEXT 4 LINES FROM www.delftstack.com/howto/python/python-clear-console/
+  #CLEARS CONSOLE
   command = 'clear'
-  if os.name in ('nt', 'dos'):  # If Machine is running on Windows, use cls
+  if os.name in ('nt', 'dos'):  
       command = 'cls'
   os.system(command)
+  #PRINTS MESSAGE AS PASSED TO METHOD
   print(message)
   
+#INITIALISES THE NODE METHOD FOR RECURSION
 class Node(object):
     def __init__(self, value):
         self.value = value
         self.left = None
         self.right = None
 
+#CALCULATES THE ANSWER TO THE EXPRESSION
+def evaluateTree(expressionTree):
+  answer = 0
+  #LOOKS FOR WHAT OF THE 4 SYMBOLS IS BEING USED AND TAKES EITHER SIDE
+  #BECAUSE IT'S RECURSIVE IT ENSURES ONLY AFTER THERE IS A NUMBER ON EACH SIDE THE IF STATEMENT IS REACHED
+  #THERE IS NO WAY THERE IS BRACKET ON EITHER SIDE IF AN OPERATOR REACHED
+  if expressionTree.value == "*":
+    answer =  float(evaluateTree(expressionTree.left)) * float(evaluateTree(expressionTree.right))
+  elif expressionTree.value == "/":
+    answer =  float(evaluateTree(expressionTree.left)) / float(evaluateTree(expressionTree.right))
+  elif expressionTree.value == "+":
+    answer =  float(evaluateTree(expressionTree.left)) + float(evaluateTree(expressionTree.right))
+  elif expressionTree.value == "-":
+    answer =  float(evaluateTree(expressionTree.left)) - float(evaluateTree(expressionTree.right))
+  else:
+    #END OF RECURSION
+    answer=expressionTree.value
+  return(answer)
+  
 
+#RECURSIVLY OUTPUTS TREE
+def treeToTerminal(expressionTree,indentNumber):
+  #indentNumber IS THE NUMBER OF INDENTS TO MAKE THE TREE ACCURATE
+
+  #FINDS THE ROOT NODE
+  if expressionTree.left != None:
+    treeToTerminal(expressionTree.left,indentNumber+1)
+
+  #THIS POINT IS ONLY REACHED AT THE END, WHEN ITS STOPS RECURSING
+  print(str(indentNumber*'  '),expressionTree.value)
+
+  #FINDS THE END OF THE BRANCHES OF THE TREE AND THEN STOPS SEARCHING FURTHER
+  if expressionTree.right != None:
+    treeToTerminal(expressionTree.right,indentNumber+1)
+
+
+#MAIN MENU THAT CO-ORDINATES THE USER'S INPUTS WITH THE APROPRIATE ACTIONS
+def menu():
+  #WHILE LOOP ENSURES THAT LOOPS TILL ENDING
+  while True:
+
+  ################# JUST TEXT FORMATTED TO LOOK NICE #################
+      clearConsoleMessage('''
+------------------------------------------------------------
+                                                                                                                                                          
+                              
+  88d8b.d8b. .d8888b. 88d888b. dP    dP 
+  88'`88'`88 88ooood8 88'  `88 88    88 
+  88  88  88 88.  ... 88    88 88.  .88 
+  dP  dP  dP `88888P' dP    dP `88888P'#
+
+
+  PLEASE SELECT AN OPTION TO CONTINUE:
+  A) VISUALIZED AN EXPRESSION
+  B) LOAD THE LAST VISUALIZED EXPRESSION  
+  C) QUIT
+          ''')
+  
+      menuInput = input("INPUT:  ")
+      print("------------------------------------------------------------ \n")
+      menuInput = menuInput.lower()
+  ######################################################################
+
+  #THE OPTION SELECTED BY THE USER IS PROCESSED THROUGH THE IF STATEMENTS BELOW
+      if menuInput == "a":
+
+          #I ADD BRACKETS IN CASE THEY FORGET TO PREVENT MY CODE FROM CRASHING
+          experessionIn = ("("+str(input("INPUT YOUR EXPRESSION: "))+")")
+          #CREATES BinaryTreeCreator OBJECT AND CALLS MAIN METHOD
+          statementOne = BinaryTreeCreator(experessionIn)
+          statementOne.main()
+          
+          #GIVES THE USER TIME TO READ OUTPUT
+          input("PRESS ENTER TO CONTINUE... ")
+
+      elif menuInput == "b":
+          clearConsoleMessage("YOUR PREVIOUS TREE IS BELOW: \n\n\n")
+          #CALLS LOAD TREE METHOD TO RETURN PREVIOUS BINARY TREE AND PRINT TO TERMINAL
+          treeToTerminal(loadTree(),0)
+          #GIVES THE USER TIME TO READ OUTPUT
+          input("\n \n \nPLEASE PRESS ENTER TO GO BACK TO MENU...")
+          
+      elif menuInput == "c":
+          #THANKS USERS BEFORE TERMINATING PROGRAM
+          clearConsoleMessage("""THANK YOU FOR USING BINARY TREE MAKER! """)
+          quit()
+
+          
+      else:
+################# JUST TEXT FORMATTED TO LOOK NICE #################
+          clearConsoleMessage('''                                                  
+------------------------------------------------------------
+
+
+  .d88b.  888d888 888d888 .d88b.  888d888      d8b 
+  d8P  Y8b 888P"   888P"  d88""88b 888P"        Y8P 
+  88888888 888     888    888  888 888              
+  Y8b.     888     888    Y88..88P 888          d8b 
+   "Y8888  888     888     "Y88P"  888          Y8P
+
+
+  - PLEASE ENSURE THAT YOU PICK BETWEEN OPTIONS A,B,C
+  - PLEASE ONLY ONE LETTER IS ENTERED
+      ''')
+          #GIVES THE USER TIME TO READ OUTPUT
+          input("\n \n \nPLEASE PRESS ENTER TO GO BACK TO MENU...")
+######################################################################
+
+#USES PICKLE LIBRARY TO SERIALIZE AND SAVE
 def saveTree(expressionTree):
-  f = open('tmp.pk1', 'wb')
-  p = pickle.Pickler(f)
-  p.dump(expressionTree)
-  f.close()
+  #CREATES FILE, WRITES DATA FROM TREE OBJECT AND CLOSES
+  fileOpen = open('LastSaved.pkl', 'wb')
+  pk = pickle.Pickler(fileOpen)
+  pk.dump(expressionTree)
+  fileOpen.close()
 
+
+#USES PICKLE LIBRARY TO UNPICKLE DATA SAVED IN PKL FILE
 def loadTree():
-  f = open('tmp.pk1', 'rb')
-  p = pickle.Unpickler(f)
-  newTreeList = p.load()
-  f.close()
+  #PICKLE FILE IS OPENED, DATA IS UNPICKLED AND FILE IS CLOSED
+  fileOpen = open('LastSaved.pkl', 'rb')
+  pk = pickle.Unpickler(fileOpen)
+  newTreeList = pk.load()
+  fileOpen.close()
   return newTreeList
-
-# class BinaryTree(object):
-#     def __init__(self, root):
-#       self.root = Node(root)
 
 class BinaryTreeCreator:
     def __init__(self, binaryTreeStr):
@@ -146,20 +259,13 @@ class BinaryTreeCreator:
         isValidSubStrings = self.validSubStrings()
         isValidBrackets = self.validBrackets()
         isValidOperand = self.validOperand()
-        # for i in range(0,len(self.defualtOperators)):
-        #     currentStr = currentStr.replace(self.defualtOperators[i], '.')
-
-        # operators = currentStr.count(".")
 
         if isValidBrackets == False:
             print("Not a valid expression, bracket mismatched")
         if isValidSubStrings == False:
             print("Not a valid expression, unrecognised charecters")
         if isValidOperand == False:
-            print("Not a valid expression, operator missing.")
-
-
-        
+            print("Not a valid expression, operator missing.") 
 
         return isValidSubStrings, isValidBrackets, isValidOperand
 
@@ -173,7 +279,6 @@ class BinaryTreeCreator:
         if workinglevelsOfTreeArray[i][1] <= minBracketDepth:
           minBracketDepth = workinglevelsOfTreeArray[i][1]
          
-
 
       for y in range(0,len(workinglevelsOfTreeArray)):
           if (workinglevelsOfTreeArray[y][1] == minBracketDepth) & (workinglevelsOfTreeArray[y][0] in self.defualtOperators):
@@ -189,7 +294,6 @@ class BinaryTreeCreator:
               #print(leftArray)
               
 
-
             if workinglevelsOfTreeArray[y+1][1] == minBracketDepth:
               #print('Right ->',workinglevelsOfTreeArray[y+1][0])
               node.right = Node(workinglevelsOfTreeArray[y+1][0])
@@ -200,8 +304,6 @@ class BinaryTreeCreator:
             return node
             break
           
-          
-      
 
     def main(self):
         isValidSubStrings, isValidBrackets,  isValidOperand = False, False,  False
@@ -227,93 +329,7 @@ class BinaryTreeCreator:
         
         
         
-def evaluateTree(expressionTree):
-  answer = 0
-  if expressionTree.value == "*":
-    answer =  float(evaluateTree(expressionTree.left)) * float(evaluateTree(expressionTree.right))
-  elif expressionTree.value == "/":
-    answer =  float(evaluateTree(expressionTree.left)) / float(evaluateTree(expressionTree.right))
-  elif expressionTree.value == "+":
-    answer =  float(evaluateTree(expressionTree.left)) + float(evaluateTree(expressionTree.right))
-  elif expressionTree.value == "-":
-    answer =  float(evaluateTree(expressionTree.left)) - float(evaluateTree(expressionTree.right))
-  else:
-    answer=expressionTree.value
-  return(answer)
-  
 
-def treeToTerminal(expressionTree,indentNumber):
-
-
-  if expressionTree.left != None:
-    treeToTerminal(expressionTree.left,indentNumber+1)
-
-  print(str(indentNumber*'  '),expressionTree.value)
-  if expressionTree.right != None:
-
-    treeToTerminal(expressionTree.right,indentNumber+1)
-    
-def menu():
-
-        optionSelect = False
-
-
-        while optionSelect != True:
-            clearConsoleMessage('''
-------------------------------------------------------------
-                                                                                                                                                                
-                                    
-        88d8b.d8b. .d8888b. 88d888b. dP    dP 
-        88'`88'`88 88ooood8 88'  `88 88    88 
-        88  88  88 88.  ... 88    88 88.  .88 
-        dP  dP  dP `88888P' dP    dP `88888P'#
-
-
-        PLEASE SELECT AN OPTION TO CONTINUE:
-        A) VISUALIZED AN EXPRESSION
-        B) LOAD THE LAST VISUALIZED EXPRESSION  
-        C) QUIT
-                ''')
-            menuInput = input("INPUT:  ")
-            print("------------------------------------------------------------ \n")
-            menuInput = menuInput.lower()
-
-            if menuInput == "a":
-                experessionIn = ("("+str(input("INPUT YOUR EXPRESSION: "))+")")
-                #statementOne = BinaryTreeCreator("((((2+3)*(4*5))+(1*(2+3))))")
-                statementOne = BinaryTreeCreator(experessionIn)
-
-                statementOne.main()
-                
-                input("PRESS ENTER TO CONTINUE... ")
-                
-                
-            elif menuInput == "b":
-                clearConsoleMessage("YOUR PREVIOUS TREE IS BELOW: \n\n\n")
-                treeToTerminal(loadTree(),0)
-                input("\n \n \nPLEASE PRESS ENTER TO GO BACK TO MENU...")
-                
-            elif menuInput == "c":
-                clearConsoleMessage("""THANK YOU FOR USING BINARY TREE MAKER! """)
-                quit()
-
-                
-            else:
-                optionSelect = False
-                clearConsoleMessage('''                                                  
-------------------------------------------------------------
-
-
-         .d88b.  888d888 888d888 .d88b.  888d888      d8b 
-        d8P  Y8b 888P"   888P"  d88""88b 888P"        Y8P 
-        88888888 888     888    888  888 888              
-        Y8b.     888     888    Y88..88P 888          d8b 
-         "Y8888  888     888     "Y88P"  888          Y8P
-
-
-        - PLEASE ENSURE THAT YOU PICK BETWEEN OPTIONS A,B,C
-        - PLEASE ONLY ONE LETTER IS ENTERED
-            ''')
 
 
 
