@@ -1,7 +1,6 @@
 #####REFERENCES####
 '''
-- find function (https://stackoverflow.com/questions/11122291/how-to-find-char-in-string-and-get-all-the-indexes)
--https://www.delftstack.com/howto/python/python-clear-console/
+- https://www.delftstack.com/howto/python/python-clear-console/
 '''
 
 #######IMPORT######
@@ -35,6 +34,7 @@ def evaluateTree(expressionTree):
   #LOOKS FOR WHAT OF THE 4 SYMBOLS IS BEING USED AND TAKES EITHER SIDE
   #BECAUSE IT'S RECURSIVE IT ENSURES ONLY AFTER THERE IS A NUMBER ON EACH SIDE THE IF STATEMENT IS REACHED
   #THERE IS NO WAY THERE IS BRACKET ON EITHER SIDE IF AN OPERATOR REACHED
+
   if expressionTree.value == "*":
     answer =  float(evaluateTree(expressionTree.left)) * float(evaluateTree(expressionTree.right))
   elif expressionTree.value == "/":
@@ -52,7 +52,6 @@ def evaluateTree(expressionTree):
 #RECURSIVLY OUTPUTS TREE
 def treeToTerminal(expressionTree,indentNumber):
   #indentNumber IS THE NUMBER OF INDENTS TO MAKE THE TREE ACCURATE
-
   #FINDS THE ROOT NODE
   if expressionTree.left != None:
     treeToTerminal(expressionTree.left,indentNumber+1)
@@ -160,7 +159,6 @@ def loadTree():
 #BinaryTreeCreator IS THE CLASS THAT DOES ALL THE CALCULATION
 #AND STRING MANIPULATION RELATED TO MAKING THE EXPRESSION PROVIDED
 #BY THE USER INTO A TREE AND THEN PRINTING THE TREE WITH CORRECT FORMAT
-
 class BinaryTreeCreator:
 
     #INITIALIZES ALL THE VARIABLES THAT WILL BE NEEDED A LOT FOR THE TASK
@@ -199,6 +197,7 @@ class BinaryTreeCreator:
         #MAKES A CLONE OF STRING FOR LOCAL USE
         currentStr = copy.copy(self.binaryTreeStr)
         isValidSubStrings = None
+
         #GOES THROUGH EACH CHARECTER IN STRING, IF ITS ACCEPTED SUBSTRING THEN REMOVES IT
         #IDEA IS THAT EVERTHING SHOULD BE GONE AFTER TRAVERSING, IF THERE IS LEFT OVER
         #THEN THERE IS AN INVALID CHARECTER 
@@ -218,7 +217,6 @@ class BinaryTreeCreator:
       #MAKES A CLONE OF STRING FOR LOCAL USE
         currentStr = copy.copy(self.binaryTreeStr)
         isValiddOperand = None
-        
         numCounter = 0
         operatorCounter = 0
 
@@ -243,10 +241,12 @@ class BinaryTreeCreator:
     def validBrackets(self):
       #JUST COUNTS OUT TOTAL CLOSING AND OPENING BRACKETS
         isValidBrackets = None
+
         #MAKES A CLONE OF STRING FOR LOCAL USE
         currentStr = copy.copy(self.binaryTreeStr)
         openBracket = currentStr.count("(")
         closeBracket = currentStr.count(")")
+
         #IF THE DIFFERENCE OF BOTH NUMBER IS 0 THEN THERE IS
         #NO BRACKET MISMATCH 
         if openBracket != closeBracket:
@@ -259,7 +259,6 @@ class BinaryTreeCreator:
 
     #CALLS ALL THE STRING VALIDATING METHODS AND PRESENTS RESULTS
     def validateString(self):
-
       #CALLS METHODS
         isValidSubStrings = self.validSubStrings()
         isValidBrackets = self.validBrackets()
@@ -272,6 +271,7 @@ class BinaryTreeCreator:
             print("Not a valid expression, unrecognised charecters")
         if isValidOperand == False:
             print("Not a valid expression, operator missing.") 
+
       #RETURNS ALL VALUES SO ITS CLEAR TO SEE WHAT PROBLEM IS
         return isValidSubStrings, isValidBrackets, isValidOperand
 
@@ -302,7 +302,6 @@ class BinaryTreeCreator:
               leftArray = workinglevelsOfTreeArray[:(y)]
               node.left = self.addToTree(leftArray)
 
-
             if workinglevelsOfTreeArray[y+1][1] == minBracketDepth:
               node.right = Node(workinglevelsOfTreeArray[y+1][0])
 
@@ -318,11 +317,13 @@ class BinaryTreeCreator:
     def main(self):
         #ENSURES THAT THE STRING IS VALID SO IT CAN CONTINUE
         isValidSubStrings, isValidBrackets,  isValidOperand = False, False,  False
+
         #KEEPS ASKING TILL A VALID STRING INPUTTED
         #IF ANY OF THE THREE CHECKS COME BACK FALSE THEN IT CAN'T ESCAPE WHILE LOOP
         while (isValidSubStrings == False) or (isValidBrackets == False) or (isValidOperand == False):
             #THIS IS USEFUL TO BREAK OUT IF AN INPUT IS VALID IT WILL ENSURE THAT ITS POSSIBLE TO CHECK AGAIN
             isValidSubStrings, isValidBrackets, isValidOperand = self.validateString()
+
             if (isValidSubStrings == False) or (isValidBrackets == False) or (isValidOperand == False):
                 experessionIn = ("("+str(input(" \n\nINCORRECT INPUT, PLEASE ENTER YOUR EXPRESSION CORRECTLY: "))+")")
                 self.binaryTreeStr = experessionIn
@@ -331,13 +332,17 @@ class BinaryTreeCreator:
         #OF BRACKETS TO MAKE EASIER TO MANIPULATE AND WORK WITH
         workingInputList = list(self.binaryTreeStr[1:-1])
         expressionTree = self.addToTree(self.levelsOfTree(workingInputList))
+        
         #JUST FOR FORMATTING AND AESTHETICS
         clearConsoleMessage(str("                         ANSWER \n                        --------- \n THE ANSWER TO YOUR EXPRESSION "+str(self.binaryTreeStr)+" IS: "+str(evaluateTree(expressionTree))+""""""))
         print(""" BINARY TREE:""")
+
         #SHOWS TREE IN TERMINAL
         treeToTerminal(expressionTree,0)
+
         #JUST FOR FORMATTING AND AESTHETICS
         print("------------------------------------------------------------")
+
         #SERIALIZES THE TREE FOR FUTURE USE
         saveTree(expressionTree)
         
